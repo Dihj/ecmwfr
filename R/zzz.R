@@ -300,6 +300,19 @@ guess_service <- function(request, user = NULL) {
                 service = service,
                 url = url))
   }
+##############
+  if (is_workflow) {
+    if (missing(user) || is.null(user)) {
+      user <- keyring::key_list(service = make_key_service("cds_beta"))[["username"]][1]
+    }
+
+    service <- "cds_beta_workflow"
+    url <- wf_server(service = "cds_beta")
+
+    return(list(user = user,
+                service = service,
+                url = url))
+  }
 
   if (missing(user) || is.null(user)) {
     user <-
