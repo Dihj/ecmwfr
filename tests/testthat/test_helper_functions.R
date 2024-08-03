@@ -72,6 +72,18 @@ test_that("test addin",{
   },
   'download.nc')"
 
+  cds_beta <- "c.retrieve(
+    'reanalysis-era5-single-levels-monthly-means',
+  {
+  'format':'netcdf',
+  'product_type':'members-monthly-means-of-daily-means',
+  'variable':'2m_temperature',
+  'year':'1979',
+  'month':'01',
+  'time':'00:00'
+  },
+  'download.nc')"
+
   mars <- 'retrieve,
 class=ep,
   dataset=cera20c,
@@ -86,6 +98,8 @@ class=ep,
   target="output"'
 
   expect_is(ecmwfr:::python_to_list(cds), class = "character")
+  expect_error(ecmwfr:::python_to_list())
+  expect_is(ecmwfr:::python_to_list(cds_beta), class = "character")
   expect_error(ecmwfr:::python_to_list())
   expect_is(ecmwfr:::MARS_to_list(mars), class = "character")
   expect_error(ecmwfr:::MARS_to_list())
