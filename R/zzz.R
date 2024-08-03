@@ -22,6 +22,7 @@ wf_server <- function(id, service = "webapi") {
   # set base urls
   webapi_url <- "https://api.ecmwf.int/v1"
   cds_url <- "https://cds.climate.copernicus.eu/api/v2"
+  cds_beta_url <- "https://cds-beta.climate.copernicus.eu/api"
   ads_url <- "https://ads.atmosphere.copernicus.eu/api/v2"
 
   # return url depending on service or id
@@ -36,6 +37,12 @@ wf_server <- function(id, service = "webapi") {
       return(ads_url)
     } else {
       return(file.path(ads_url, "tasks", id))
+    }
+  } else if (service == "cds_beta") {
+    if (missing(id)) {
+      return(cds_beta_url)
+    } else {
+      return(file.path(cds_beta_url, "tasks", id))
     }
   } else {
     if (missing(id)) {
@@ -81,6 +88,7 @@ exit_message <- function(url, service, path, file) {
   job_list <- switch(service,
     "webapi"= " Visit https://apps.ecmwf.int/webmars/joblist/",
     "cds" = " Visit https://cds.climate.copernicus.eu/cdsapp#!/yourrequests",
+    "cds_beta" = " Visit https://cds-beta.climate.copernicus.eu/requests?tab=all",
     "ads" = " Visit https://ads.atmosphere.copernicus.eu/cdsapp#!/yourrequests"
   )
 
@@ -133,6 +141,7 @@ exit_message <- function(url, service, path, file) {
       vers,
       ". Please respect the terms of use:\n",
       "     - https://cds.climate.copernicus.eu/disclaimer-privacy\n",
+      "     - https://cds-beta.climate.copernicus.eu/disclaimer-privacy\n",
       "     - https://www.ecmwf.int/en/terms-use\n"
     )
     if (interactive())
@@ -171,6 +180,7 @@ wf_key_page <- function(service) {
   switch(service,
          webapi = "https://api.ecmwf.int/v1/key/",
          cds = "https://cds.climate.copernicus.eu/user/login?destination=user",
+         cds_beta = "https://cds-beta.climate.copernicus.eu/profile",
          ads = "https://ads.atmosphere.copernicus.eu/user/login?destination=user")
 }
 
@@ -198,6 +208,12 @@ wf_check_login <- function(user, key, service) {
   # CDS service
   if (service == "cds") {
     url <- paste0(wf_server(service = "cds"), "/tasks/")
+    ct <- httr::GET(url, httr::authenticate(user, key))
+    return(httr::status_code(ct) < 400)
+  }
+  # CDS-BETA service
+  if (service == "cds_beta") {
+    url <- paste0(wf_server(service = "cds_beta"), "/tasks/")
     ct <- httr::GET(url, httr::authenticate(user, key))
     return(httr::status_code(ct) < 400)
   }
@@ -290,6 +306,7 @@ guess_service <- function(request, user = NULL) {
       rbind(
         keyring::key_list(service = make_key_service(c("webapi"))),
         keyring::key_list(service = make_key_service(c("cds"))),
+        keyring::key_list(service = make_key_service(c("cds_beta"))),
         keyring::key_list(service = make_key_service(c("ads")))
       )
     serv <- make_key_service()
@@ -307,7 +324,7 @@ guess_service <- function(request, user = NULL) {
   if (length(correct) == 0) {
     stop(
       sprintf(
-        "Data identifier %s is not found in Web API, CDS or ADS datasets.
+        "Data identifier %s is not found in Web API, CDS, CDS-BETA or ADS datasets.
                  Or your login credentials do not match your request.",
         request$dataset_short_name
       ),

@@ -53,6 +53,8 @@ wf_datasets <- function(
     encode = "json"),
     "cds" = httr::GET(sprintf("%s/resources/",
                                   wf_server(service = "cds"))),
+    "cds_beta" = httr::GET(sprintf("%s/resources/",
+                                  wf_server(service = "cds_beta"))),
     "ads" = httr::GET(sprintf("%s/resources/",
                             wf_server(service = "ads"))))
 

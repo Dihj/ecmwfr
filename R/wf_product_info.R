@@ -42,7 +42,7 @@ wf_product_info <- function(
   }
 
   # match arguments, if not stop
-  service <- match.arg(service, c("webapi", "cds", "ads"))
+  service <- match.arg(service, c("webapi", "cds", "cds_beta", "ads"))
 
   # query the status url provided
   if (service == "webapi"){

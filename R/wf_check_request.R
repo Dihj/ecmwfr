@@ -34,7 +34,7 @@ wf_check_request <- memoise::memoise(function(
   }
 
   service <- do.call("rbind",
-                     lapply(c("webapi","cds","ads"),
+                     lapply(c("webapi","cds", "cds_beta","ads"),
                                      function(service){
     dataset <- try(wf_datasets(user,
                                service = service),
@@ -77,7 +77,7 @@ wf_check_request <- memoise::memoise(function(
 
   if(is.null(service)){
     stop(
-    sprintf("Data identifier %s is not found in Web API, CDS or ADS datasets.
+    sprintf("Data identifier %s is not found in Web API, CDS, CDS-BETA or ADS datasets.
              Or your login credentials do not match your request.",
                  request$dataset), call. = FALSE)
   }

@@ -45,7 +45,7 @@ wf_transfer <- function(
   }
 
   # match arguments, if not stop
-  service <- match.arg(service, c("webapi", "cds", "ads"))
+  service <- match.arg(service, c("webapi", "cds", "cds_beta", "ads"))
 
   # check the login credentials
   if (missing(user) || missing(url)) {
@@ -53,7 +53,7 @@ wf_transfer <- function(
   }
 
   # If the URL is not an URL but an ID: generate URL
-  if (service == "cds" | service == "ads") {
+  if (service == "cds" | service == "ads" | service == "cds_beta") {
     url <- wf_server(id = basename(url), service = service)
   }
 
@@ -64,7 +64,7 @@ wf_transfer <- function(
   tmp_file <- file.path(path, filename)
 
   # download routine depends on service queried
-  if (service == "cds" | service == "ads") {
+  if (service == "cds" | service == "ads" | service == "cds_beta") {
     response <- httr::GET(
       url,
       httr::authenticate(user, key),
@@ -152,7 +152,7 @@ wf_transfer <- function(
                           href = url)))
   }
 
-  if (service == "cds" | service == "ads") {
+  if (service == "cds" | service == "ads" | service == "cds_beta") {
 
     # if the transfer failed, return error and stop()
     if (ct$state == "failed") {

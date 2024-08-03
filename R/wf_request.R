@@ -127,7 +127,7 @@ wf_request <- function(
 
   # check the login credentials
   if (missing(request)) {
-    stop("Please provide ECMWF or CDS login credentials and data request!")
+    stop("Please provide ECMWF or CDS or CDS-BETA login credentials and data request!")
   }
 
   # check for user
@@ -155,6 +155,7 @@ wf_request <- function(
     service,
     webapi = webapi_service,
     cds = cds_service,
+    cds_beta = cds_beta_service,
     cds_workflow = cds_workflow,
     ads = ads_service
     )

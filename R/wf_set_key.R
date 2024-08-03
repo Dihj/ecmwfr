@@ -55,7 +55,7 @@ wf_set_key <- function(user, key, service) {
 
   if (missing(service)) {
     stop("Please provide a service for which
-         to set your API key ('webapi' or 'cds')")
+         to set your API key ('webapi' or 'cds' or 'cds_beta')")
   }
 
   if (missing(user) | missing(key)) {
