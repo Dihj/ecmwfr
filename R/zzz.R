@@ -17,7 +17,7 @@
 wf_server <- function(id, service = "webapi") {
 
   # match arguments, if not stop
-  service <- match.arg(service, c("webapi", "cds", "ads"))
+  service <- match.arg(service, c("webapi", "cds", "cds_beta", "ads"))
 
   # set base urls
   webapi_url <- "https://api.ecmwf.int/v1"
